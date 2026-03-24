@@ -135,4 +135,9 @@ void regresaralmenu()
     Console.WriteLine("Presione ENTER para regresar al menu");
     Console.ReadKey();
 }
+Console.WriteLine("Resumen final");
+Console.WriteLine("Resumen final");
+Console.WriteLine("Resumen final");
+Console.WriteLine("Resumen final");
+Console.WriteLine("Resumen final");
 
