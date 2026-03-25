@@ -1,6 +1,4 @@
-﻿
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Threading.Tasks.Dataflow;
 
 int opcion;
@@ -26,7 +24,7 @@ do
     Console.WriteLine("1. Validacion tecnica");
     Console.WriteLine("2. Mostrar reglas");
     Console.WriteLine("3. Estadisticas");
-    Console.WriteLine("4. Reiniciar");
+    Console.WriteLine("4. Reiniciar estadisticas");
     Console.WriteLine("5. Salir");
 
     if (!int.TryParse(Console.ReadLine(), out opcion))
@@ -43,22 +41,27 @@ do
             do
             {
                 Console.Clear();
-                Console.WriteLine("== SELECCION DE CONTENIDO ===");
+                Console.WriteLine("==== Tipo de contenido ====");
                 Console.WriteLine("1. Pelicula");
                 Console.WriteLine("2. Serie");
                 Console.WriteLine("3. Documental");
                 Console.WriteLine("4. Evento en vivo");
-                Console.WriteLine("0. Continuar");
+                Console.WriteLine("0. continuar");
 
                 if (!int.TryParse(Console.ReadLine(), out opcioncontenido))
+                {
+                    Console.WriteLine("Entrada invalida");
                     continue;
+                }
 
                 if (opcioncontenido == 0) break;
 
-                Console.WriteLine("Ingrese duracion:");
+                Console.Clear();
+                Console.WriteLine("Ingrese la duracion en minutos:");
                 if (!int.TryParse(Console.ReadLine(), out int duracion))
                 {
-                    Console.WriteLine("Error");
+                    Console.WriteLine("Dato erroneo");
+                    regresaralmenu();
                     continue;
                 }
 
@@ -76,9 +79,12 @@ do
                     case 4:
                         contendiovalido = (duracion >= 30 && duracion <= 240);
                         break;
+                    default:
+                        Console.WriteLine("Opcion invalida");
+                        continue;
                 }
-
-                Console.WriteLine(contendiovalido ? "Valido" : "No valido");
+                Console.Clear();
+                Console.WriteLine(contendiovalido ? "Contenido válido" : "Contenido NO válido");
                 regresaralmenu();
 
             } while (opcioncontenido != 0);
@@ -88,114 +94,120 @@ do
             do
             {
                 Console.Clear();
-                Console.WriteLine("== SELECCION DE CLASIFICACIÓN ===");
+                Console.WriteLine("==== Clasificacion ====");
                 Console.WriteLine("1. Todo publico");
                 Console.WriteLine("2. +13");
                 Console.WriteLine("3. +18");
-                Console.WriteLine("0. Continuar");
+                Console.WriteLine("0. continuar");
 
                 if (!int.TryParse(Console.ReadLine(), out opcionclas))
+                {
+                    Console.WriteLine("Entrada invalida");
                     continue;
+                }
 
                 if (opcionclas == 0) break;
 
-                Console.WriteLine("Ingrese hora (0-23):");
+                Console.Clear();
+                Console.WriteLine("Ingrese la hora (0-23):");
                 if (!int.TryParse(Console.ReadLine(), out hora))
+                {
+                    Console.WriteLine("Hora invalida");
                     continue;
+                }
+
+                bool horarioValido = true;
 
                 switch (opcionclas)
                 {
                     case 1:
+                        Console.Clear();
+                        Console.WriteLine("Valido a cualquier hora");
                         break;
 
                     case 2:
                         if (hora < 6 || hora > 22)
                         {
-                            Console.WriteLine("Horario invalido");
-                            contendiovalido = false;
+                            Console.Clear();
+                            Console.WriteLine("Horario invalido para +13");
+                            horarioValido = false;
                         }
                         break;
 
                     case 3:
                         if (!(hora >= 22 || hora <= 5))
                         {
-                            Console.WriteLine("Horario invalido");
-                            contendiovalido = false;
+                            Console.Clear();
+                            Console.WriteLine("Horario invalido para +18");
+                            horarioValido = false;
                         }
                         break;
+
+                    default:
+                        Console.WriteLine("Opcion invalida");
+                        continue;
+                }
+
+                if (!horarioValido)
+                {
+                    contendiovalido = false;
                 }
 
                 regresaralmenu();
 
             } while (opcionclas != 0);
-            if (opcionclas == 0)
-            {
-                Console.WriteLine("Contenido en revisión");
-                revision++;
-                totalevaluados++;
-                regresaralmenu();
-                break;
-            }
 
-            if (!contendiovalido)
-            {
-                Console.WriteLine("Rechazado por clasificación");
-                rechazados++;
-                totalevaluados++;
-                regresaralmenu();
-                break;
-            }
+            if (!contendiovalido) break;
             do
             {
                 Console.Clear();
-                Console.WriteLine("== SELECCION DE IMPACTO ===");
+                Console.WriteLine("==== Produccion ====");
                 Console.WriteLine("1. Baja");
                 Console.WriteLine("2. Media");
                 Console.WriteLine("3. Alta");
-                Console.WriteLine("0. Continuar");
+                Console.WriteLine("0. continuar");
 
                 if (!int.TryParse(Console.ReadLine(), out opcionproduccion))
+                {
+                    Console.WriteLine("Entrada invalida");
                     continue;
+                }
 
                 if (opcionproduccion == 0) break;
 
                 if (opcionproduccion == 1 && opcionclas == 3)
                 {
-                    Console.WriteLine("No permitido");
+                    Console.WriteLine("Produccion baja NO permitida para +18");
                     contendiovalido = false;
                 }
-                if (opcionproduccion == 1) bajo++;
-                if (opcionproduccion == 2) medio++;
-                if (opcionproduccion == 3) alto++;
+                else
+                {
+                    Console.WriteLine("Produccion aceptada");
+                }
 
                 regresaralmenu();
 
             } while (opcionproduccion != 0);
-            if (opcionproduccion == 0)
-            {
-                Console.WriteLine("Contenido en revisión");
-                revision++;
-                totalevaluados++;
-                regresaralmenu();
-                break;
-            }
+
             totalevaluados++;
 
             if (contendiovalido)
             {
-                Console.WriteLine("CONTENIDO PUBLICADO");
+                Console.WriteLine("Contenido PUBLICADO");
                 publicados++;
             }
             else
             {
-                Console.WriteLine("CONTENIDO RECHAZADO");
+                Console.WriteLine("Contenido RECHAZADO");
                 rechazados++;
             }
 
             regresaralmenu();
             break;
         case 2:
-            { Console.WriteLine("==== Reglas del sistema ===="); 
+            {
+                Console.Clear();
+                Console.WriteLine("==== Reglas del sistema ===="); 
                 Console.WriteLine("Todo público: cualquier hora"); 
                 Console.WriteLine("+13: entre 6 y 22 horas"); 
                 Console.WriteLine("+18: entre 22 y 5 horas"); 
@@ -209,37 +221,44 @@ do
                 Console.WriteLine(); 
                 Console.WriteLine("==== Reglas de producción ===="); 
                 Console.WriteLine("Producción baja solo válida para Todo público o +13"); 
-                Console.WriteLine("Producción media o alta válida para cualquier clasificación"); }
+                Console.WriteLine("Producción media o alta válida para cualquier clasificación"); 
+                regresaralmenu();
+            }
             break;
 
         case 3:
+            Console.Clear();
+            Console.WriteLine("=== Estadisticas ===");
             Console.WriteLine($"Total Evaluados: {totalevaluados}");
             Console.WriteLine($"Publicados: {publicados}");
             Console.WriteLine($"Rechazados: {rechazados}");
             Console.WriteLine($"En revision: {revision}");
             if (totalevaluados > 0)
             {
-                double porcentaje = (publicados*100) / totalevaluados;
-                Console.WriteLine($"porcentaje de aprobación: {porcentaje}");
+                double porcentaje = (publicados*100.0) / totalevaluados;
+                Console.WriteLine($"porcentaje de aprobación: {porcentaje}%");
             }
             
-            if (bajo > medio && bajo > alto)
+            if (bajo > medio && bajo > alto && bajo > 0)
             {
                 Console.WriteLine("Impacto predominante: bajo");
             }    
-            else if (medio > alto)
+            else if (medio > alto && medio > 0)
             {
                 Console.WriteLine("Impacto predominante: medio");
             }
             else if (alto > 0)
             {
                 Console.WriteLine("Impacto predominante: alto");
-            }    
+            }
+            Console.WriteLine();
             regresaralmenu();
             break;
 
         case 4:
-            totalevaluados = publicados = rechazados = 0;
+            totalevaluados = publicados = rechazados = revision = 0;
+            bajo = medio = alto = 0;
+            Console.Clear();
             Console.WriteLine("Reiniciado");
             regresaralmenu();
             break;
