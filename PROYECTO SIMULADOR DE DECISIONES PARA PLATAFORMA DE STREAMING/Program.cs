@@ -187,5 +187,3 @@ void regresaralmenu()
     Console.WriteLine("Presione ENTER para regresar");
     Console.ReadLine();
 }
-
-AssemblyDelaySignAttribute
