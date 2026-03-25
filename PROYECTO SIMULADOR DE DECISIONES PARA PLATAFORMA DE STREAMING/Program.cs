@@ -1,5 +1,7 @@
 ﻿
 
+using System.Reflection;
+
 int opcion;
 int totalevaluados = 0;
 int publicados = 0;
@@ -185,3 +187,5 @@ void regresaralmenu()
     Console.WriteLine("Presione ENTER para regresar");
     Console.ReadLine();
 }
+
+AssemblyDelaySignAttribute
